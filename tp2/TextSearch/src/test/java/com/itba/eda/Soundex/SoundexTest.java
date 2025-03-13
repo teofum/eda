@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SoundexTest {
     @Test
-    @DisplayName("Returns expected codes for test strings")
+    @DisplayName("Soundex: Returns expected codes for test strings")
     public void testSoundexStrings() {
         assertEquals("T624", new Soundex("threshold").toString());
         assertEquals("H430", new Soundex("hold").toString());
@@ -17,7 +17,7 @@ public class SoundexTest {
     }
 
     @Test
-    @DisplayName("Ignores non-letter characters in the middle of the string")
+    @DisplayName("Soundex: Ignores non-letter characters in the middle of the string")
     public void testSoundexNonLetters() {
         var baseline = new Soundex("threshold").toString();
         assertEquals(baseline, new Soundex("thr423esh99old50").toString());
@@ -25,26 +25,26 @@ public class SoundexTest {
     }
 
     @Test
-    @DisplayName("Ignores non-letter characters at the beginning of the string")
+    @DisplayName("Soundex: Ignores non-letter characters at the beginning of the string")
     public void testSoundexNonLettersBegin() {
         var baseline = new Soundex("threshold").toString();
         assertEquals(baseline, new Soundex("1234thresh,,,old").toString());
     }
 
     @Test
-    @DisplayName("Throws on invalid input (empty string)")
+    @DisplayName("Soundex: Throws on invalid input (empty string)")
     public void testSoundexEmptyString() {
         assertThrows(IllegalArgumentException.class, () -> new Soundex(""));
     }
 
     @Test
-    @DisplayName("Throws on invalid input (no letters)")
+    @DisplayName("Soundex: Throws on invalid input (no letters)")
     public void testSoundexInvalidArgument() {
         assertThrows(IllegalArgumentException.class, () -> new Soundex("12345678"));
     }
 
     @Test
-    @DisplayName("Similarity returns expected values for test strings")
+    @DisplayName("Soundex: Similarity returns expected values for test strings")
     public void testSoundexSimilarity() {
         assertEquals(0.0, Soundex.similarity("threshold", "hold"));
         assertEquals(0.75, new Soundex("phone").similarity(new Soundex("foun")));

@@ -41,7 +41,7 @@ public class Soundex {
         while (i < in.length && !Character.isLetter(in[i])) i++;
 
         // If we reached the end of the string, throw — input is supposed to contain at least one letter
-        if (i == in.length) throw new IllegalArgumentException("Argument must not be empty");
+        if (i == in.length) throw new IllegalArgumentException("Argument must contain at least one letter");
 
         // Output the first character as-is, converting to uppercase
         out[0] = Character.toUpperCase(in[i]);
