@@ -1,20 +1,40 @@
 package com.itba.eda.Soundex;
 
 public class Soundex {
-    private final String encoded;
-    private static final int[] codes = {
+    private static final int CODE_LENGTH = 4;
+    private static final int[] CODES = {
             0, 1, 2, 3, 0, 1, 2, 0, 0, 2, 2, 4, 5, 5, 0, 1, 2, 6, 2, 3, 0, 1, 0, 2, 0, 2
     };
 
+    private final String encoded;
+
     Soundex(String text) {
         encoded = encode(text);
+    }
+
+    public static double similarity(String text1, String text2) {
+        return (new Soundex(text1)).similarity(new Soundex(text2));
+    }
+
+    public double similarity(Soundex other) {
+        int matches = 0;
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            if (encoded.charAt(i) == other.encoded.charAt(i)) matches++;
+        }
+
+        return (double) matches / (double) CODE_LENGTH;
+    }
+
+    @Override
+    public String toString() {
+        return encoded;
     }
 
     private static String encode(String text) {
         if (text.isEmpty()) throw new IllegalArgumentException("Argument must not be empty");
 
         var in = text.toCharArray();
-        var out = new char[4];
+        var out = new char[CODE_LENGTH];
 
         // Skip until the first alphabetic character
         int i = 0;
@@ -32,7 +52,7 @@ public class Soundex {
 
         // Iterate the array, skipping characters with code 0 and repeats and outputting the rest
         // until a max length of three numbers is reached
-        for (i++; i < text.length() && w < 4; i++, last = current) {
+        for (i++; i < text.length() && w < out.length; i++, last = current) {
             if (Character.isLetter(in[i])) {
                 current = getCode(in[i]);
                 if (current != 0 && current != last) {
@@ -48,11 +68,6 @@ public class Soundex {
     }
 
     private static int getCode(char c) {
-        return codes[Character.toUpperCase(c) - 'A'];
-    }
-
-    @Override
-    public String toString() {
-        return encoded;
+        return CODES[Character.toUpperCase(c) - 'A'];
     }
 }

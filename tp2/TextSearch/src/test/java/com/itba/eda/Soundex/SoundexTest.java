@@ -42,4 +42,11 @@ public class SoundexTest {
     public void testSoundexInvalidArgument() {
         assertThrows(IllegalArgumentException.class, () -> new Soundex("12345678"));
     }
+
+    @Test
+    @DisplayName("Similarity returns expected values for test strings")
+    public void testSoundexSimilarity() {
+        assertEquals(0.0, Soundex.similarity("threshold", "hold"));
+        assertEquals(0.75, new Soundex("phone").similarity(new Soundex("foun")));
+    }
 }
