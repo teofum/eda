@@ -19,7 +19,8 @@ public class Soundex {
     public double similarity(Soundex other) {
         int matches = 0;
         for (int i = 0; i < CODE_LENGTH; i++) {
-            if (encoded.charAt(i) == other.encoded.charAt(i)) matches++;
+            if (encoded.charAt(i) == other.encoded.charAt(i))
+                matches++;
         }
 
         return (double) matches / (double) CODE_LENGTH;
@@ -31,17 +32,21 @@ public class Soundex {
     }
 
     private static String encode(String text) {
-        if (text.isEmpty()) throw new IllegalArgumentException("Argument must not be empty");
+        if (text.isEmpty())
+            throw new IllegalArgumentException("Argument must not be empty");
 
         var in = text.toCharArray();
         var out = new char[CODE_LENGTH];
 
         // Skip until the first alphabetic character
         int i = 0;
-        while (i < in.length && !Character.isLetter(in[i])) i++;
+        while (i < in.length && !Character.isLetter(in[i]))
+            i++;
 
-        // If we reached the end of the string, throw — input is supposed to contain at least one letter
-        if (i == in.length) throw new IllegalArgumentException("Argument must contain at least one letter");
+        // If we reached the end of the string, throw — input is supposed to contain at
+        // least one letter
+        if (i == in.length)
+            throw new IllegalArgumentException("Argument must contain at least one letter");
 
         // Output the first character as-is, converting to uppercase
         out[0] = Character.toUpperCase(in[i]);
@@ -50,7 +55,8 @@ public class Soundex {
         int current = 0;
         int w = 1;
 
-        // Iterate the array, skipping characters with code 0 and repeats and outputting the rest
+        // Iterate the array, skipping characters with code 0 and repeats and outputting
+        // the rest
         // until a max length of three numbers is reached
         for (i++; i < text.length() && w < out.length; i++, last = current) {
             if (Character.isLetter(in[i])) {
@@ -62,7 +68,8 @@ public class Soundex {
         }
 
         // Fill the output with zeros
-        while (w < 4) out[w++] = '0';
+        while (w < 4)
+            out[w++] = '0';
 
         return new String(out);
     }

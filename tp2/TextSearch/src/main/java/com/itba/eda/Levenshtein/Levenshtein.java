@@ -16,8 +16,7 @@ public class Levenshtein {
                 var cost = a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1;
                 distance[i][j] = Math.min(
                         Math.min(distance[i - 1][j], distance[i][j - 1]) + 1,
-                        distance[i - 1][j - 1] + cost
-                );
+                        distance[i - 1][j - 1] + cost);
             }
         }
 
