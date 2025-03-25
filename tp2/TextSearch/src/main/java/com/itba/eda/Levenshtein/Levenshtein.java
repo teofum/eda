@@ -22,4 +22,8 @@ public class Levenshtein {
 
         return distance[a.length()][b.length()];
     }
+
+    public static double similarity(String a, String b) {
+        return 1.0 - (double) distance(a, b) / (double) Math.max(a.length(), b.length());
+    }
 }

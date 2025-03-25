@@ -49,10 +49,10 @@ public class MetaphoneTest {
         assertThrows(IllegalArgumentException.class, () -> new Metaphone("12345678"));
     }
 
-//    @Test
-//    @DisplayName("Metaphone: Similarity returns expected values for test strings")
-//    public void testMetaphoneSimilarity() {
-//        assertEquals(0.0, Metaphone.similarity("threshold", "hold"));
-//        assertEquals(0.75, new Metaphone("phone").similarity(new Metaphone("foun")));
-//    }
+    @Test
+    @DisplayName("Metaphone: Similarity returns expected values for test strings")
+    public void testMetaphoneSimilarity() {
+        assertEquals(0.4, Metaphone.levenshteinSimilarity("threshold", "hold"));
+        assertEquals(1.0, Metaphone.levenshteinSimilarity("foun", "phone"));
+    }
 }

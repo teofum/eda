@@ -1,5 +1,7 @@
 package com.itba.eda.Metaphone;
 
+import com.itba.eda.Levenshtein.Levenshtein;
+
 public class Metaphone {
     private final String encoded;
 
@@ -17,7 +19,8 @@ public class Metaphone {
             throw new IllegalArgumentException("Argument must not be empty");
 
         var in = text.toCharArray();
-        var out = new char[in.length * 2]; // Output is never longer than input * 2 (worst case: input string is all Xs)
+        var out = new char[in.length * 2]; // Output is never longer than input * 2 (worst case: input string is
+                                           // something like XTXTXT...)
 
         int r = 0, w = 0; // Read/write indices
 
@@ -180,6 +183,10 @@ public class Metaphone {
         }
 
         return new String(out, 0, w);
+    }
+
+    public static double levenshteinSimilarity(String a, String b) {
+        return Levenshtein.similarity(encode(a), encode(b));
     }
 
     private static boolean vowel(char c) {
