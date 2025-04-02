@@ -11,7 +11,7 @@ public class QGrams {
     private Map<String, Integer> qgrams;
     private int qgramCount;
 
-    QGrams(int N, String s) {
+    public QGrams(int N, String s) {
         this.N = N;
         this.qgrams = new HashMap<>();
 
