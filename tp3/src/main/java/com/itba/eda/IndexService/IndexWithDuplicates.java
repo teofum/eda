@@ -2,6 +2,8 @@ package com.itba.eda.IndexService;
 
 import java.util.Arrays;
 
+import com.itba.eda.Sorting.Sorting;
+
 public class IndexWithDuplicates implements IndexService {
     private final static int chunkSize = 256;
 
@@ -20,6 +22,9 @@ public class IndexWithDuplicates implements IndexService {
         // Align storage size to chunk size
         storage = Arrays.copyOf(elements, align(elements.length, chunkSize));
         count = elements.length;
+
+        // Sort the values
+        Sorting.quickSort(storage, 0, count - 1);
     }
 
     public boolean search(int key) {

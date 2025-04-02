@@ -8,14 +8,35 @@ import org.junit.jupiter.api.Test;
 
 public class IndexWithDuplicatesTest {
     @Test
-    @DisplayName("Initialization")
-    public void testInitialization() {
+    @DisplayName("Initialization gives correct count")
+    public void testInitializationCount() {
         var index = new IndexWithDuplicates();
 
         index.initialize(new int[] { 1, 3, 7 });
         assertEquals(3, index.getCount());
+    }
+
+    @Test
+    @DisplayName("Initialization throws on null input")
+    public void testInitializationThrows() {
+        var index = new IndexWithDuplicates();
 
         assertThrows(NullPointerException.class, () -> index.initialize(null));
+    }
+
+    @Test
+    @DisplayName("Initialization sorts input correctly")
+    public void testInitializationSort() {
+        var index = new IndexWithDuplicates();
+
+        index.initialize(new int[] { 98, 56, 75, 3, 98, 120, 7 });
+
+        assertEquals(true, index.search(98));
+        assertEquals(true, index.search(56));
+        assertEquals(true, index.search(3));
+
+        assertEquals(2, index.occurrences(98));
+        assertEquals(1, index.occurrences(120));
     }
 
     @Test
