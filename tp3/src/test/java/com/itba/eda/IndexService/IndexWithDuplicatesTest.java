@@ -11,16 +11,16 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Initialization gives correct count")
     public void testInitializationCount() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 7 });
+        index.initialize(new Integer[] { 1, 3, 7 });
         assertEquals(3, index.getCount());
     }
 
     @Test
     @DisplayName("Initialization throws on null input")
     public void testInitializationThrows() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
         assertThrows(NullPointerException.class, () -> index.initialize(null));
     }
@@ -28,9 +28,9 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Initialization sorts input correctly")
     public void testInitializationSort() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 98, 56, 75, 3, 98, 120, 7 });
+        index.initialize(new Integer[] { 98, 56, 75, 3, 98, 120, 7 });
 
         assertEquals(true, index.search(98));
         assertEquals(true, index.search(56));
@@ -43,9 +43,9 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Search")
     public void testSearch() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 7 });
+        index.initialize(new Integer[] { 1, 3, 7 });
         assertEquals(true, index.search(1));
         assertEquals(true, index.search(3));
         assertEquals(true, index.search(7));
@@ -55,9 +55,9 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Occurrences")
     public void testOccurrences() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 3, 3, 7 });
+        index.initialize(new Integer[] { 1, 3, 3, 3, 7 });
         assertEquals(1, index.occurrences(1));
         assertEquals(3, index.occurrences(3));
         assertEquals(1, index.occurrences(7));
@@ -67,9 +67,9 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Insert")
     public void testInsertion() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 7 });
+        index.initialize(new Integer[] { 1, 3, 7 });
         index.insert(80);
         index.insert(37);
 
@@ -88,9 +88,9 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Delete")
     public void testDeletion() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 3, 3, 7, 37, 80 });
+        index.initialize(new Integer[] { 1, 3, 3, 3, 7, 37, 80 });
         assertEquals(true, index.search(3));
         assertEquals(true, index.search(37));
 
@@ -109,9 +109,9 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Min/Max")
     public void testMinMax() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 3, 3, 7, 37, 80 });
+        index.initialize(new Integer[] { 1, 3, 3, 3, 7, 37, 80 });
         assertEquals(80, index.max());
         assertEquals(1, index.min());
 
@@ -131,45 +131,39 @@ public class IndexWithDuplicatesTest {
     @Test
     @DisplayName("Range")
     public void testRange() {
-        var index = new IndexWithDuplicates();
+        var index = new IndexWithDuplicates<Integer>();
 
-        index.initialize(new int[] { 1, 3, 3, 3, 7, 37, 80 });
+        index.initialize(new Integer[] { 1, 3, 3, 3, 7, 37, 80 });
         index.insert(50);
 
         // Range with inclusive ends
         var range = index.range(3, 37, true, true);
-        assertArrayEquals(new int[] { 3, 3, 3, 7, 37 }, range);
+        assertArrayEquals(new Integer[] { 3, 3, 3, 7, 37 }, range);
 
         // Range with exclusive ends
         range = index.range(3, 37, false, false);
-        assertArrayEquals(new int[] { 7 }, range);
+        assertArrayEquals(new Integer[] { 7 }, range);
 
         // Range with inclusive/exclusive ends
         range = index.range(3, 80, true, false);
-        assertArrayEquals(new int[] { 3, 3, 3, 7, 37, 50 }, range);
+        assertArrayEquals(new Integer[] { 3, 3, 3, 7, 37, 50 }, range);
 
         // Range with begin = end
         range = index.range(37, 37, true, true);
-        assertArrayEquals(new int[] { 37 }, range);
+        assertArrayEquals(new Integer[] { 37 }, range);
         range = index.range(3, 3, true, true);
-        assertArrayEquals(new int[] { 3, 3, 3 }, range);
+        assertArrayEquals(new Integer[] { 3, 3, 3 }, range);
 
         // Range with empty result
         range = index.range(100, 80, true, true);
-        assertArrayEquals(new int[] {}, range);
+        assertArrayEquals(new Integer[] {}, range);
         range = index.range(80, 80, false, false);
-        assertArrayEquals(new int[] {}, range);
+        assertArrayEquals(new Integer[] {}, range);
         range = index.range(50, 80, false, false);
-        assertArrayEquals(new int[] {}, range);
+        assertArrayEquals(new Integer[] {}, range);
         range = index.range(80, 80, true, false);
-        assertArrayEquals(new int[] {}, range);
+        assertArrayEquals(new Integer[] {}, range);
         range = index.range(120, 180, true, true);
-        assertArrayEquals(new int[] {}, range);
+        assertArrayEquals(new Integer[] {}, range);
     }
-
-    // private static void assertArrayEquals(int[] expected, int[] actual) {
-    // assertEquals(expected.length, actual.length);
-    // for (int i = 0; i < expected.length; i++)
-    // assertEquals(expected[i], actual[i]);
-    // }
 }

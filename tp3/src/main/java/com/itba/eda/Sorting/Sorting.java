@@ -4,17 +4,18 @@ public class Sorting {
     /*
      * Sort an array in place
      */
-    public static void quickSort(int[] array) {
+    public static <T extends Comparable<? super T>> void quickSort(T[] array) {
         quickSort(array, 0, array.length - 1);
     }
 
-    public static void quickSort(int[] array, int begin, int end) {
+    public static <T extends Comparable<? super T>> void quickSort(T[] array, int begin, int end) {
         if (begin >= end)
             return;
 
-        int pivot = array[end], i = begin;
+        T pivot = array[end];
+        int i = begin;
         for (int j = begin; j < end; j++) {
-            if (array[j] <= pivot) {
+            if (pivot.compareTo(array[j]) >= 0) {
                 swap(array, i, j);
                 i++;
             }
@@ -25,8 +26,8 @@ public class Sorting {
         quickSort(array, i + 1, end);
     }
 
-    private static void swap(int[] array, int i0, int i1) {
-        int temp = array[i0];
+    private static <T extends Comparable<? super T>> void swap(T[] array, int i0, int i1) {
+        T temp = array[i0];
         array[i0] = array[i1];
         array[i1] = temp;
     }
