@@ -27,4 +27,20 @@ public interface IndexService {
      * Return the number of ocurrences of a key in the index.
      */
     int occurrences(int key);
+
+    /*
+     * Returns an array containing all keys between left and right. Ends
+     * may or may not be inclusive.
+     */
+    int[] range(int left, int right, boolean includeLeft, boolean includeRight);
+
+    /*
+     * Returns the maximum key.
+     */
+    int max();
+
+    /*
+     * Returns the minimum key.
+     */
+    int min();
 }
