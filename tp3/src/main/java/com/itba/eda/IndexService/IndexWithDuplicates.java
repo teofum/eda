@@ -1,5 +1,6 @@
 package com.itba.eda.IndexService;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import com.itba.eda.Sorting.Sorting;
@@ -8,14 +9,14 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
     private final static int chunkSize = 256;
 
     private int count; // Actual item count, storage.length is the capacity
-    private Object[] storage;
+    private T[] storage;
 
+    @SuppressWarnings("unchecked")
     public IndexWithDuplicates() {
-        storage = new Object[chunkSize];
+        storage = (T[]) new Comparable[chunkSize];
         count = 0;
     }
 
-    @SuppressWarnings("unchecked")
     public void initialize(T[] elements) {
         if (elements == null)
             throw new NullPointerException("Elements array is null");
@@ -26,6 +27,16 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
 
         // Sort the values
         Sorting.quickSort((T[]) storage, 0, count - 1);
+    }
+
+    public T at(int idx) {
+        if (idx >= count || idx < 0)
+            throw new IndexOutOfBoundsException();
+        return (T) storage[idx];
+    }
+
+    public int count() {
+        return count;
     }
 
     public boolean search(T key) {
@@ -69,10 +80,6 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
         return right - left + 1;
     }
 
-    public int getCount() {
-        return count;
-    }
-
     @SuppressWarnings("unchecked")
     public T[] range(T left, T right, boolean includeLeft, boolean includeRight) {
         // Find boundaries
@@ -87,12 +94,14 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
         if (rightPos >= count || right.compareTo((T) storage[rightPos]) < 0)
             rightPos--;
 
+        System.out.printf("%d, %d, %d", leftPos, rightPos, count);
         if (leftPos >= count)
-            return (T[]) Arrays.copyOfRange(storage, 0, 0);
-        return (T[]) Arrays.copyOfRange(storage, leftPos, rightPos + 1);
+            return (T[]) Array.newInstance(left.getClass(), 0);
+        var temp = (T[]) Array.newInstance(left.getClass(), rightPos - leftPos + 1);
+        System.arraycopy(storage, leftPos, temp, 0, rightPos - leftPos + 1);
+        return temp;
     }
 
-    @SuppressWarnings("unchecked")
     public T max() {
         if (count == 0)
             throw new RuntimeException("Index has no elements");
@@ -100,7 +109,6 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
         return (T) storage[count - 1];
     }
 
-    @SuppressWarnings("unchecked")
     public T min() {
         if (count == 0)
             throw new RuntimeException("Index has no elements");
@@ -108,7 +116,6 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
         return (T) storage[0];
     }
 
-    @SuppressWarnings("unchecked")
     private int getClosestPosition(T key, boolean last) {
         // Binary search on storage
         int left = 0, right = count - 1;
@@ -141,4 +148,9 @@ public class IndexWithDuplicates<T extends Comparable<? super T>> implements Ind
     private int align(int n, int to) {
         return to * ((n + to - 1) / to);
     }
+
+    public int getCount() {
+        return count;
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.itba.eda.IndexService;
 
-public interface IndexService<T extends Comparable<? super T>> {
+import java.util.Iterator;
+
+public interface IndexService<T extends Comparable<? super T>> extends Iterable<T> {
     /*
      * Initialize the index with specified values. Existing values are discarded.
      * Throws if elements is null.
@@ -43,4 +45,29 @@ public interface IndexService<T extends Comparable<? super T>> {
      * Returns the minimum key.
      */
     T min();
+
+    /*
+     * Returns the key at a specific position.
+     */
+    T at(int idx);
+
+    /*
+     * Returns the number of keys in the index.
+     */
+    int count();
+
+    default Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private final int count = count();
+            private int idx = 0;
+
+            public boolean hasNext() {
+                return idx < count;
+            }
+
+            public T next() {
+                return at(idx++);
+            }
+        };
+    }
 }

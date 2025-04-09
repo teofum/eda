@@ -1,6 +1,10 @@
 package com.itba.eda.IndexService;
 
 public record IndexRecord<K extends Comparable<? super K>, V>(K key, V value) implements Comparable<IndexRecord<K, V>> {
+    public IndexRecord(K key) {
+        this(key, null);
+    }
+
     public int compareTo(IndexRecord<K, V> o) {
         return key.compareTo(o.key());
     }
