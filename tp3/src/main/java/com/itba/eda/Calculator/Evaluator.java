@@ -1,6 +1,5 @@
 package com.itba.eda.Calculator;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Stack;
