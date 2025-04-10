@@ -15,25 +15,35 @@ public class Evaluator {
             entry("+", (a, b) -> a + b),
             entry("-", (a, b) -> a - b),
             entry("*", (a, b) -> a * b),
-            entry("/", (a, b) -> a / b));
+            entry("/", (a, b) -> a / b),
+            entry("^", (a, b) -> Math.pow(a, b)));
 
     private final Map<Map.Entry<String, String>, Boolean> precedence = Map.ofEntries(
             entry(entry("+", "+"), true),
             entry(entry("+", "-"), true),
             entry(entry("+", "*"), false),
             entry(entry("+", "/"), false),
+            entry(entry("+", "^"), false),
             entry(entry("-", "+"), true),
             entry(entry("-", "-"), true),
             entry(entry("-", "*"), false),
             entry(entry("-", "/"), false),
+            entry(entry("-", "^"), false),
             entry(entry("*", "+"), true),
             entry(entry("*", "-"), true),
             entry(entry("*", "*"), true),
             entry(entry("*", "/"), true),
+            entry(entry("*", "^"), false),
             entry(entry("/", "+"), true),
             entry(entry("/", "-"), true),
             entry(entry("/", "*"), true),
-            entry(entry("/", "/"), true));
+            entry(entry("/", "/"), true),
+            entry(entry("/", "^"), false),
+            entry(entry("^", "+"), true),
+            entry(entry("^", "-"), true),
+            entry(entry("^", "*"), true),
+            entry(entry("^", "/"), true),
+            entry(entry("^", "^"), false));
 
     public double evaluate(String expr) {
         var scanner = new Scanner(infixToPostfix(expr)).useDelimiter("\\s+");
