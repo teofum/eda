@@ -24,26 +24,43 @@ public class Evaluator {
             entry(entry("+", "*"), false),
             entry(entry("+", "/"), false),
             entry(entry("+", "^"), false),
+            entry(entry("+", "("), false),
+            entry(entry("+", ")"), true),
             entry(entry("-", "+"), true),
             entry(entry("-", "-"), true),
             entry(entry("-", "*"), false),
             entry(entry("-", "/"), false),
             entry(entry("-", "^"), false),
+            entry(entry("-", "("), false),
+            entry(entry("-", ")"), true),
             entry(entry("*", "+"), true),
             entry(entry("*", "-"), true),
             entry(entry("*", "*"), true),
             entry(entry("*", "/"), true),
             entry(entry("*", "^"), false),
+            entry(entry("*", "("), false),
+            entry(entry("*", ")"), true),
             entry(entry("/", "+"), true),
             entry(entry("/", "-"), true),
             entry(entry("/", "*"), true),
             entry(entry("/", "/"), true),
             entry(entry("/", "^"), false),
+            entry(entry("/", "("), false),
+            entry(entry("/", ")"), true),
             entry(entry("^", "+"), true),
             entry(entry("^", "-"), true),
             entry(entry("^", "*"), true),
             entry(entry("^", "/"), true),
-            entry(entry("^", "^"), false));
+            entry(entry("^", "^"), false),
+            entry(entry("^", "("), false),
+            entry(entry("^", ")"), true),
+            entry(entry("(", "+"), false),
+            entry(entry("(", "-"), false),
+            entry(entry("(", "*"), false),
+            entry(entry("(", "/"), false),
+            entry(entry("(", "^"), false),
+            entry(entry("(", "("), false),
+            entry(entry("(", ")"), false));
 
     public double evaluate(String expr) {
         var scanner = new Scanner(infixToPostfix(expr)).useDelimiter("\\s+");
@@ -87,13 +104,22 @@ public class Evaluator {
         while (scanner.hasNext()) {
             var token = scanner.next();
 
-            var isOperator = operators.containsKey(token);
+            var isOperator = "()".contains(token) || operators.containsKey(token);
             if (isOperator) {
                 // Check precedence
                 while (!opStack.isEmpty() && precedence.get(entry(opStack.peek(), token))) {
                     postfixExpr.append(opStack.pop()).append(" ");
                 }
-                opStack.push(token);
+
+                // Handle closing parentheses
+                if (token.equals(")")) {
+                    if (!opStack.empty() && opStack.peek().equals("("))
+                        opStack.pop(); // Remove closing parens without appending
+                    else
+                        throw new RuntimeException("No matching opening parentheses found");
+                } else {
+                    opStack.push(token);
+                }
             } else {
                 postfixExpr.append(token).append(" ");
             }
@@ -102,6 +128,9 @@ public class Evaluator {
         scanner.close();
 
         while (!opStack.isEmpty()) {
+            if (opStack.peek().equals("("))
+                throw new RuntimeException("No matching closing parentheses found");
+
             postfixExpr.append(opStack.pop()).append(" ");
         }
 
