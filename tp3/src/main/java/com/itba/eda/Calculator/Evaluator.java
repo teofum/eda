@@ -7,8 +7,13 @@ import java.util.function.BinaryOperator;
 
 import static java.util.Map.entry;
 
+import java.util.HashMap;
+
 public class Evaluator {
+    private static final String VAR_REGEX = "^[A-Za-z][A-Za-z0-9_]*$";
+
     private final Stack<Double> stack = new Stack<>();
+    private final Map<String, Double> variables = new HashMap<>();
 
     private final Map<String, BinaryOperator<Double>> operators = Map.ofEntries(
             entry("+", (a, b) -> a + b),
@@ -62,6 +67,20 @@ public class Evaluator {
             entry(entry("(", ")"), false));
 
     public double evaluate(String expr) {
+        // Absolute hack for cheap assignments
+        String assignTo = null;
+        if (expr.contains("=")) {
+            var parts = expr.split("=");
+            if (parts.length != 2)
+                throw new RuntimeException("Syntax error in assignment expression");
+
+            assignTo = parts[0].trim();
+            expr = parts[1].trim();
+
+            if (!assignTo.matches(VAR_REGEX))
+                throw new RuntimeException("Bad variable name");
+        }
+
         var scanner = new Scanner(infixToPostfix(expr)).useDelimiter("\\s+");
 
         stack.clear();
@@ -82,8 +101,13 @@ public class Evaluator {
 
         if (stack.size() != 1)
             throw new RuntimeException("Invalid stack size at evaluation end, bad expression");
-        return stack.pop();
+        var result = stack.pop();
 
+        if (assignTo != null) {
+            variables.put(assignTo, result);
+        }
+
+        return result;
     }
 
     private void operate(BinaryOperator<Double> op) {
@@ -119,8 +143,15 @@ public class Evaluator {
                 } else {
                     opStack.push(token);
                 }
-            } else {
+            } else if (token.matches("[0-9]*(.[0-9]+)?")) {
                 postfixExpr.append(token).append(" ");
+            } else if (token.matches(VAR_REGEX)) {
+                var value = variables.get(token);
+                if (value == null)
+                    throw new RuntimeException("Variable " + token + " is undefined");
+                postfixExpr.append(value).append(" ");
+            } else {
+                throw new RuntimeException("Invalid token " + token);
             }
         }
 
