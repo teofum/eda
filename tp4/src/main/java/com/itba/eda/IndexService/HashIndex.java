@@ -26,13 +26,23 @@ public class HashIndex<K, V> {
         if (value == null)
             throw new IllegalArgumentException("Value cannot be null");
 
-        var keyHash = hash(key);
-        if (storage[keyHash] == null)
-            size++;
-        else if (!storage[keyHash].key.equals(key))
-            throw new RuntimeException("Not implemented"); // Collision
+        var idx = hash(key);
+        int firstLogical = -1;
 
-        storage[keyHash] = new Entry<>(key, value);
+        // Increment idx until we find the element or a physical deletion, storing
+        // the first logical deletion if any
+        while (storage[idx] != null && !key.equals(storage[idx].key)) {
+            if (storage[idx].key == null && firstLogical == -1)
+                firstLogical = idx;
+
+            idx = (idx + 1) % storage.length;
+        }
+
+        var putIdx = firstLogical != -1 ? firstLogical : idx;
+        if (storage[putIdx] == null || storage[putIdx].key == null)
+            size++;
+
+        storage[putIdx] = new Entry<>(key, value);
 
         if ((double) size / (double) storage.length >= LOAD_FACTOR)
             grow();
@@ -42,7 +52,11 @@ public class HashIndex<K, V> {
         if (key == null)
             throw new IllegalArgumentException("Key cannot be null");
 
-        var entry = storage[hash(key)];
+        var idx = hash(key);
+        Entry<K, V> entry;
+        while ((entry = storage[idx]) != null && !key.equals(entry.key))
+            idx = (idx + 1) % storage.length;
+
         return entry == null ? null : entry.value;
     }
 
@@ -50,11 +64,19 @@ public class HashIndex<K, V> {
         if (key == null)
             throw new IllegalArgumentException("Key cannot be null");
 
-        var keyHash = hash(key);
-        if (storage[keyHash] == null)
+        var idx = hash(key);
+        Entry<K, V> entry;
+        while ((entry = storage[idx]) != null && !key.equals(entry.key))
+            idx = (idx + 1) % storage.length;
+
+        if (entry == null)
             return false;
 
-        storage[keyHash] = null;
+        if (storage[idx + 1] == null)
+            storage[idx] = null; // Physical deletion
+        else
+            storage[idx] = new Entry<>(null, null); // Logical deletion, represented by an entry with null key and value
+
         size--;
         return true;
     }
@@ -72,7 +94,6 @@ public class HashIndex<K, V> {
 
     private int hash(K key) {
         int pre = prehash != null ? prehash.apply(key) : key.hashCode();
-        System.out.println(String.format("pre: %d, hash: %d", pre, pre % storage.length));
         return Integer.remainderUnsigned(pre, storage.length);
     }
 
@@ -82,8 +103,13 @@ public class HashIndex<K, V> {
 
         for (int i = 0; i < storage.length; i++) {
             var entry = storage[i];
-            if (entry != null)
-                newStorage[hash(entry.key)] = entry;
+            if (entry != null && entry.key != null) {
+                var idx = hash(entry.key);
+                while (newStorage[idx] != null)
+                    idx++;
+
+                newStorage[idx] = entry;
+            }
         }
 
         storage = newStorage;
