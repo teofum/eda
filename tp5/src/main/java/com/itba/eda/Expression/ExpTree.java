@@ -15,6 +15,27 @@ public class ExpTree implements ExpressionService {
         ls.close();
     }
 
+    public String preOrder() {
+        if (root == null)
+            return "";
+
+        return root.preOrder();
+    }
+
+    public String postOrder() {
+        if (root == null)
+            return "";
+
+        return root.postOrder();
+    }
+
+    public String inOrder() {
+        if (root == null)
+            return "";
+
+        return root.inOrder();
+    }
+
     static final class Node {
         private String data;
         private Node left, right;
@@ -33,5 +54,42 @@ public class ExpTree implements ExpressionService {
                 case String token -> data = token;
             }
         }
+
+        public String preOrder() {
+            var sb = new StringBuilder();
+
+            sb.append(data).append(" ");
+            if (left != null)
+                sb.append(left.preOrder());
+            if (right != null)
+                sb.append(right.preOrder());
+
+            return sb.toString();
+        }
+
+        public String postOrder() {
+            var sb = new StringBuilder();
+
+            if (left != null)
+                sb.append(left.postOrder());
+            if (right != null)
+                sb.append(right.postOrder());
+            sb.append(data);
+
+            return sb.append(" ").toString();
+        }
+
+        public String inOrder() {
+            var sb = new StringBuilder();
+
+            if (left != null)
+                sb.append("( ").append(left.inOrder());
+            sb.append(data).append(" ");
+            if (right != null)
+                sb.append(right.inOrder()).append(") ");
+
+            return sb.toString();
+        }
+
     }
 }

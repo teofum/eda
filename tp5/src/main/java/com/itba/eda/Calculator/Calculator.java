@@ -13,5 +13,9 @@ public class Calculator {
         is.close();
 
         var tree = new ExpTree(line);
+
+        System.out.println("preOrder: " + tree.preOrder());
+        System.out.println("postOrder: " + tree.postOrder());
+        System.out.println("inOrder: " + tree.inOrder());
     }
 }
