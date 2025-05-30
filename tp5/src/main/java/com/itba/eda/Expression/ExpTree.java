@@ -36,7 +36,14 @@ public class ExpTree implements ExpressionService {
         return root.inOrder().trim();
     }
 
-    static final class Node {
+    public double eval() {
+        if (root == null)
+            throw new RuntimeException("Attempt to eval null expression");
+
+        return root.eval();
+    }
+
+    static final class Node implements ExpressionService {
         private String data;
         private Node left, right;
 
@@ -91,5 +98,19 @@ public class ExpTree implements ExpressionService {
             return sb.toString();
         }
 
+        public double eval() {
+            if (left != null && right != null) {
+                return switch (data) {
+                    case "+" -> left.eval() + right.eval();
+                    case "-" -> left.eval() - right.eval();
+                    case "*" -> left.eval() * right.eval();
+                    case "/" -> left.eval() / right.eval();
+                    case "^" -> Math.pow(left.eval(), right.eval());
+                    default -> throw new RuntimeException("Unsupported operator " + data);
+                };
+            } else {
+                return Double.valueOf(data);
+            }
+        }
     }
 }

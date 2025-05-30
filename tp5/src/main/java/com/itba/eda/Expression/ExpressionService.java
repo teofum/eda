@@ -6,4 +6,6 @@ public interface ExpressionService {
     String postOrder();
 
     String inOrder();
+
+    double eval();
 }

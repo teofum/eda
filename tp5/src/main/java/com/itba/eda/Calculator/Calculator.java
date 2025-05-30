@@ -17,5 +17,7 @@ public class Calculator {
         System.out.println("preOrder: " + tree.preOrder());
         System.out.println("postOrder: " + tree.postOrder());
         System.out.println("inOrder: " + tree.inOrder());
+
+        System.out.println("\nresult: " + tree.eval());
     }
 }
