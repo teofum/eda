@@ -38,7 +38,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <mainClass>com.itba.eda.Books.Books</mainClass>
+                    <mainClass>com.itba.eda.Calculator.Calculator</mainClass>
                 </configuration>
             </plugin>
         </plugins>
