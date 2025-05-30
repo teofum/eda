@@ -56,4 +56,11 @@ public class ExpTreeTest {
         String expr = "( ( 2 + 3.5 ) * -10 )";
         assertEquals("( ( 2 + 3.5 ) * -10 )", new ExpTree(expr).inOrder());
     }
+
+    @Test
+    @DisplayName("Evaluation")
+    public void testEval() {
+        String expr = "( ( 2 + 3.5 ) * -10 )";
+        assertEquals(-55.0, new ExpTree(expr).eval());
+    }
 }
