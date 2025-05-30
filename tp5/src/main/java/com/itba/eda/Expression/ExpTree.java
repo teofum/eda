@@ -19,21 +19,21 @@ public class ExpTree implements ExpressionService {
         if (root == null)
             return "";
 
-        return root.preOrder();
+        return root.preOrder().trim();
     }
 
     public String postOrder() {
         if (root == null)
             return "";
 
-        return root.postOrder();
+        return root.postOrder().trim();
     }
 
     public String inOrder() {
         if (root == null)
             return "";
 
-        return root.inOrder();
+        return root.inOrder().trim();
     }
 
     static final class Node {
