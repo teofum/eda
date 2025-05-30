@@ -1,0 +1,18 @@
+3.1)
+Obtenidos: d.txt
+Explicación:
+    - Como se usa StandardAnalyzer los queries se pasan a minúsculas
+        (no es caps sensitive)
+    - content:IEDO~ matchea "video" en b.txt y d.txt por distancia levenshtein
+        (max 2): iedo -> ideo -> video
+    - content:[PI TO SOS] matchea "review" en d.txt: 'p' < 'r' < 's' entonces
+        "pi" < "review" < "sos"
+
+3.2)
+Obtenidos: a.txt
+Explicación:
+    - El PhraseQuery "review game game," no matchea nada pues no aparece "game"
+        dos veces luego de "review" en ningún documento.
+    - El PhraseQuery ",,store,,game" como estamos usando el StandardAnalyzer
+        busca la secuencia ["store" "game"] (separa por espacios y puntuación),
+        que se encuentra en a.txt.
