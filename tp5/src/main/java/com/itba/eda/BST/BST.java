@@ -100,6 +100,18 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
         return root == null ? 0 : root.count(data);
     }
 
+    public T nth(int n) {
+        var iter = new BSTIteratorInOrder();
+        T data = null;
+        for (int i = 0; i < n; i++) {
+            data = iter.hasNext() ? iter.next() : null;
+            if (data == null)
+                break;
+        }
+
+        return data;
+    }
+
     public class BSTIteratorByLevel implements Iterator<T> {
         Queue<Node> pending = new LinkedList<>();
 

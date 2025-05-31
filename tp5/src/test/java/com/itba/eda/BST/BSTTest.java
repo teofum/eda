@@ -140,6 +140,32 @@ public class BSTTest {
         assertEquals(0, tree.count(40));
     }
 
+    @Test
+    @DisplayName("Nth")
+    public void testNth() {
+        var tree = makeTestTree2();
+
+        assertEquals(8, tree.nth(1));
+        assertEquals(15, tree.nth(2));
+        assertEquals(20, tree.nth(3));
+        assertEquals(35, tree.nth(7));
+        assertEquals(55, tree.nth(8));
+        assertEquals(74, tree.nth(9));
+        assertNull(tree.nth(10));
+        assertNull(tree.nth(0));
+
+        tree.delete(55);
+        assertEquals(35, tree.nth(7));
+        assertEquals(74, tree.nth(8));
+        assertNull(tree.nth(9));
+
+        tree.delete(8);
+        assertEquals(15, tree.nth(1));
+        assertEquals(74, tree.nth(7));
+        assertNull(tree.nth(8));
+        assertNull(tree.nth(9));
+    }
+
     private BST<Integer> makeTestTree() {
         var tree = new BST<Integer>();
 
