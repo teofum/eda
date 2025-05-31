@@ -28,6 +28,17 @@ public class BSTTester {
         System.out.println("byLevel: " + tree.byLevel());
         System.out.println("height: " + tree.height());
 
+        tree.delete(44);
+        System.out.println(tree.hierarchy());
+        tree.delete(80);
+        System.out.println(tree.hierarchy());
+        tree.delete(20);
+        System.out.println(tree.hierarchy());
+        tree.delete(50);
+        System.out.println(tree.hierarchy());
+        tree.delete(50);
+        System.out.println(tree.hierarchy());
+
         var tree2 = new BST<Integer>();
 
         tree2.insert(35);

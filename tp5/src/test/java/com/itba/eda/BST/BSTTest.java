@@ -1,5 +1,6 @@
 package com.itba.eda.BST;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -54,6 +55,40 @@ public class BSTTest {
         var tree = makeTestTree2();
 
         assertEquals("35 20 74 15 22 55 8 27 25", tree.byLevel().trim());
+    }
+
+    @Test
+    @DisplayName("Deletion")
+    public void testDeletion() {
+        var tree = makeTestTree();
+
+        // R1
+        assertEquals(true, tree.contains(44));
+        tree.delete(44);
+        assertEquals(false, tree.contains(44));
+
+        // R2
+        assertEquals(true, tree.contains(80));
+        tree.delete(80);
+        assertEquals(false, tree.contains(80));
+        assertEquals(70, tree.max());
+
+        // R3
+        assertEquals(true, tree.contains(20));
+        tree.delete(20);
+        assertEquals(false, tree.contains(20));
+        assertEquals(10, tree.min());
+
+        assertEquals(true, tree.contains(50));
+        tree.delete(50);
+        assertEquals(true, tree.contains(50));
+        tree.delete(50);
+        assertEquals(false, tree.contains(50));
+        assertEquals(70, tree.max());
+        assertEquals(10, tree.min());
+
+        var empty = new BST<Integer>();
+        assertDoesNotThrow(() -> empty.delete(50));
     }
 
     private BST<Integer> makeTestTree() {

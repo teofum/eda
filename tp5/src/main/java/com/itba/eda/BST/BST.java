@@ -25,6 +25,11 @@ public class BST<T extends Comparable<? super T>> {
         return root == null ? null : root.min();
     }
 
+    public void delete(T data) {
+        if (root != null)
+            root = root.delete(data);
+    }
+
     public String preOrder() {
         return root != null ? root.preOrder() : null;
     }
@@ -122,6 +127,40 @@ public class BST<T extends Comparable<? super T>> {
 
         public T min() {
             return left == null ? data : left.min();
+        }
+
+        public Node delete(T data) {
+            return switch ((Integer) data.compareTo(this.data)) {
+                case 0 -> {
+                    // R1
+                    if (left == null && right == null)
+                        yield null;
+
+                    // R2
+                    if (left == null)
+                        yield right;
+                    if (right == null)
+                        yield left;
+
+                    // R3
+                    T maxLeft = left.max();
+                    this.data = maxLeft;
+                    left = left.delete(maxLeft);
+                    yield this;
+                }
+                case Integer cmp when cmp > 0 -> {
+                    // Greater than data, delete from right subtree
+                    if (right != null)
+                        right = right.delete(data);
+                    yield this;
+                }
+                default -> {
+                    // Less than data, delete from left subtree
+                    if (left != null)
+                        left = left.delete(data);
+                    yield this;
+                }
+            };
         }
 
         public String preOrder() {
