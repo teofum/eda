@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.itba.eda.BST.BST.Order;
-
 public class BSTTest {
     @Test
     @DisplayName("Insertion")
@@ -108,7 +106,7 @@ public class BSTTest {
     @DisplayName("IteratorInOrder")
     public void testIteratorInOrder() {
         var tree = makeTestTree2();
-        tree.setOrder(Order.InOrder);
+        tree.setOrder(BinaryTree.Order.InOrder);
 
         var sb = new StringBuilder();
         for (var v : tree)
