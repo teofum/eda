@@ -35,10 +35,21 @@ public class BinaryTree implements BinaryTreeService {
         if (root == null)
             return null;
 
+        /*
+         * Do a BFS with dummy nodes where nodes are null. We keep a queue of
+         * nodes, which can be null (dummy) as we traverse the tree by level.
+         */
         var sb = new StringBuilder();
         Queue<Node> pending = new LinkedList<>();
         pending.add(root);
 
+        /*
+         * Keep track of the number of non-null nodes in the queue. We need this
+         * because we're adding dummy nodes wven if there's nothing there, so we
+         * can't use an empty queue as an end condition (the tree would have
+         * infinite levels full of dummy nodes). If the entire queue is null, we
+         * reached the end of the tree and can exit.
+         */
         int nonNull = 1;
         int iLevel = 0, levelSize = 1;
         while (nonNull > 0) {
