@@ -27,7 +27,10 @@ public class AVLNode<T extends Comparable<? super T>> implements Node<T> {
     }
 
     public AVLNode<T> insert(T data) {
-        if (data.compareTo(this.data) > 0) {
+        int cmp = data.compareTo(this.data);
+        if (cmp == 0) {
+            return this;
+        } else if (cmp > 0) {
             right = switch (right) {
                 case null -> new AVLNode<T>(data);
                 case AVLNode<T> right -> right.insert(data);
