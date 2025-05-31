@@ -45,7 +45,7 @@ public class BinaryTree implements BinaryTreeService {
                 case String token -> {
                     current = switch (nextPending.action) {
                         case NodeOperation.Action.LEFT -> current.setLeft(new Node());
-                        case NodeOperation.Action.RIGHT -> current.setLeft(new Node());
+                        case NodeOperation.Action.RIGHT -> current.setRight(new Node());
                         case NodeOperation.Action.CONSUME -> current;
                     };
 
@@ -84,9 +84,9 @@ public class BinaryTree implements BinaryTreeService {
             var sb = new StringBuilder();
             sb.append(data).append(" ");
             if (left != null)
-                sb.append(left.preOrder()).append(" ");
+                sb.append(left.preOrder());
             if (right != null)
-                sb.append(right.preOrder()).append(" ");
+                sb.append(right.preOrder());
 
             return sb.toString();
         }
@@ -94,10 +94,10 @@ public class BinaryTree implements BinaryTreeService {
         public String postOrder() {
             var sb = new StringBuilder();
             if (left != null)
-                sb.append(left.postOrder()).append(" ");
+                sb.append(left.postOrder());
             if (right != null)
-                sb.append(right.postOrder()).append(" ");
-            sb.append(data);
+                sb.append(right.postOrder());
+            sb.append(" ").append(data);
 
             return sb.toString();
         }
