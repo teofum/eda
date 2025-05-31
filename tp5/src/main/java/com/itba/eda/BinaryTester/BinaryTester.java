@@ -21,6 +21,9 @@ public class BinaryTester {
             System.out.println("postOrder: " + tree.postOrder());
             System.out.println("byLevel:\n" + tree.byLevel());
 
+            System.out.println("height:\n" + tree.height());
+            System.out.println("height iter:\n" + tree.heightIter());
+
             if (tree.equals(tree)) {
                 System.out.println("the tree is equal to itself");
             } else {

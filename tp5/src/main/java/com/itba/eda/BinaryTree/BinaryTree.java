@@ -3,8 +3,10 @@ package com.itba.eda.BinaryTree;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.function.UnaryOperator;
 
 public class BinaryTree implements BinaryTreeService {
@@ -92,11 +94,38 @@ public class BinaryTree implements BinaryTreeService {
         }
     }
 
+    public int height() {
+        return root == null ? -1 : root.height();
+    }
+
+    public int heightIter() {
+        if (root == null)
+            return -1;
+
+        Queue<Entry<Node, Integer>> pending = new LinkedList<>();
+        pending.add(Map.entry(root, 0));
+
+        int level = 0;
+        while (!pending.isEmpty()) {
+            var e = pending.remove();
+            level = Math.max(level, e.getValue());
+
+            if (e.getKey().left != null)
+                pending.add(Map.entry(e.getKey().left, e.getValue() + 1));
+            if (e.getKey().right != null)
+                pending.add(Map.entry(e.getKey().right, e.getValue() + 1));
+        }
+
+        return level;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof BinaryTree bt))
             return false;
 
+        if (root == null)
+            return bt.root == null;
         return root.equals(bt.root);
     }
 
@@ -186,6 +215,13 @@ public class BinaryTree implements BinaryTreeService {
                         : right.hierarchy(prefix + "╰──"));
             }
             return sb.toString();
+        }
+
+        public int height() {
+            int leftHeight = left == null ? 0 : left.height() + 1;
+            int rightHeight = right == null ? 0 : right.height() + 1;
+
+            return Math.max(leftHeight, rightHeight);
         }
 
         @Override
