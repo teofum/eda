@@ -38,7 +38,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <mainClass>com.itba.eda.Calculator.Calculator</mainClass>
+                    <mainClass>com.itba.eda.BinaryTester.BinaryTester</mainClass>
                 </configuration>
             </plugin>
         </plugins>
