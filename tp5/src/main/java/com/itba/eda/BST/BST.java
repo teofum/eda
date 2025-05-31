@@ -3,9 +3,15 @@ package com.itba.eda.BST;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class BST<T extends Comparable<? super T>> implements Iterable<T> {
+    public static enum Order {
+        ByLevel, InOrder
+    };
+
     private Node root;
+    private Order order = Order.ByLevel;
 
     public void insert(T data) {
         if (root == null)
@@ -80,7 +86,14 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
     }
 
     public Iterator<T> iterator() {
-        return new BSTIteratorByLevel();
+        return switch (order) {
+            case Order.ByLevel -> new BSTIteratorByLevel();
+            case Order.InOrder -> new BSTIteratorInOrder();
+        };
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public class BSTIteratorByLevel implements Iterator<T> {
@@ -104,6 +117,35 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
                 pending.add(node.right);
 
             return node.data;
+        }
+    }
+
+    public class BSTIteratorInOrder implements Iterator<T> {
+        Stack<Node> stack = new Stack<>();
+        Node current = root;
+
+        public boolean hasNext() {
+            return !stack.isEmpty() || current != null;
+        }
+
+        public T next() {
+            T value = null;
+            while (value == null) {
+                value = switch (current) {
+                    case null -> {
+                        var next = stack.pop();
+                        current = next.right();
+                        yield next.data;
+                    }
+                    case Node n -> {
+                        stack.push(n);
+                        current = n.left();
+                        yield null;
+                    }
+                };
+            }
+
+            return value;
         }
     }
 

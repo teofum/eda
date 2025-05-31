@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.itba.eda.BST.BST.Order;
+
 public class BSTTest {
     @Test
     @DisplayName("Insertion")
@@ -100,6 +102,18 @@ public class BSTTest {
         for (var v : tree)
             sb.append(v + " ");
         assertEquals("35 20 74 15 22 55 8 27 25", sb.toString().trim());
+    }
+
+    @Test
+    @DisplayName("IteratorInOrder")
+    public void testIteratorInOrder() {
+        var tree = makeTestTree2();
+        tree.setOrder(Order.InOrder);
+
+        var sb = new StringBuilder();
+        for (var v : tree)
+            sb.append(v + " ");
+        assertEquals("8 15 20 22 25 27 35 55 74", sb.toString().trim());
     }
 
     private BST<Integer> makeTestTree() {
