@@ -19,6 +19,7 @@ public class BinaryTester {
             System.out.println(tree.hierarchy());
             System.out.println("preOrder: " + tree.preOrder());
             System.out.println("postOrder: " + tree.postOrder());
+            System.out.println("byLevel:\n" + tree.byLevel());
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }

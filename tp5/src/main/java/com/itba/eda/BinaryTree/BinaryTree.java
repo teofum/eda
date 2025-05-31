@@ -31,6 +31,47 @@ public class BinaryTree implements BinaryTreeService {
         return root != null ? root.hierarchy("") : null;
     }
 
+    public String byLevel() {
+        if (root == null)
+            return null;
+
+        var sb = new StringBuilder();
+        Queue<Node> pending = new LinkedList<>();
+        pending.add(root);
+
+        int nonNull = 1;
+        int iLevel = 0, levelSize = 1;
+        while (nonNull > 0) {
+            var node = pending.remove();
+            if (node != null) {
+                nonNull--;
+
+                sb.append(node.data + " ");
+
+                pending.add(node.left);
+                if (node.left != null)
+                    nonNull++;
+                pending.add(node.right);
+                if (node.right != null)
+                    nonNull++;
+            } else {
+                sb.append("? ");
+
+                pending.add(null);
+                pending.add(null);
+            }
+
+            iLevel++;
+            if (iLevel == levelSize) {
+                iLevel = 0;
+                levelSize *= 2;
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
     private void buildTree(Scanner scanner) {
         Queue<NodeOperation> pending = new LinkedList<>();
 
