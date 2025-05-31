@@ -1,9 +1,10 @@
 package com.itba.eda.BST;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BST<T extends Comparable<? super T>> {
+public class BST<T extends Comparable<? super T>> implements Iterable<T> {
     private Node root;
 
     public void insert(T data) {
@@ -76,6 +77,34 @@ public class BST<T extends Comparable<? super T>> {
 
     public int height() {
         return root == null ? -1 : root.height();
+    }
+
+    public Iterator<T> iterator() {
+        return new BSTIteratorByLevel();
+    }
+
+    public class BSTIteratorByLevel implements Iterator<T> {
+        Queue<Node> pending = new LinkedList<>();
+
+        public BSTIteratorByLevel() {
+            if (root != null)
+                pending.add(root);
+        }
+
+        public boolean hasNext() {
+            return !pending.isEmpty();
+        }
+
+        public T next() {
+            var node = pending.remove();
+
+            if (node.left != null)
+                pending.add(node.left);
+            if (node.right != null)
+                pending.add(node.right);
+
+            return node.data;
+        }
     }
 
     public class Node {

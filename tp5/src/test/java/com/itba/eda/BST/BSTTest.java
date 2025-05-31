@@ -91,6 +91,17 @@ public class BSTTest {
         assertDoesNotThrow(() -> empty.delete(50));
     }
 
+    @Test
+    @DisplayName("IteratorByLevel")
+    public void testIteratorByLevel() {
+        var tree = makeTestTree2();
+
+        var sb = new StringBuilder();
+        for (var v : tree)
+            sb.append(v + " ");
+        assertEquals("35 20 74 15 22 55 8 27 25", sb.toString().trim());
+    }
+
     private BST<Integer> makeTestTree() {
         var tree = new BST<Integer>();
 

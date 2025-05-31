@@ -57,5 +57,10 @@ public class BSTTester {
         System.out.println("inOrder: " + tree2.inOrder());
         System.out.println("byLevel: " + tree2.byLevel());
         System.out.println("height: " + tree2.height());
+
+        var sb = new StringBuilder("iterator: ");
+        for (var v : tree2)
+            sb.append(v + " ");
+        System.out.println(sb);
     }
 }
