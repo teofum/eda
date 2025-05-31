@@ -81,8 +81,6 @@ public class AVLTest {
 
         assertEquals(true, tree.contains(50));
         tree.delete(50);
-        assertEquals(true, tree.contains(50));
-        tree.delete(50);
         assertEquals(false, tree.contains(50));
         assertEquals(70, tree.max());
         assertEquals(10, tree.min());

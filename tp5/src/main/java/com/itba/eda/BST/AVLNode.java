@@ -47,20 +47,69 @@ public class AVLNode<T extends Comparable<? super T>> implements Node<T> {
         return switch ((Integer) balance()) {
             case Integer b when b > 1 -> {
                 if (data.compareTo(left.data) > 0)
-                    left = left.rotateLeft();
-                yield rotateRight();
+                    left = left.rotateLeft(); // LR
+                yield rotateRight(); // LL
             }
             case Integer b when b < -1 -> {
                 if (data.compareTo(right.data) < 0)
-                    right = right.rotateRight();
-                yield rotateLeft();
+                    right = right.rotateRight(); // RL
+                yield rotateLeft(); // RR
             }
             default -> this;
         };
     }
 
     public AVLNode<T> delete(T data) {
-        throw new RuntimeException("Not implemented");
+        var self = switch ((Integer) data.compareTo(this.data)) {
+            case 0 -> {
+                // R1
+                if (left == null && right == null)
+                    yield null;
+
+                // R2
+                if (left == null)
+                    yield right;
+                if (right == null)
+                    yield left;
+
+                // R3
+                T maxLeft = left.max();
+                this.data = maxLeft;
+                left = left.delete(maxLeft);
+                yield this;
+            }
+            case Integer cmp when cmp > 0 -> {
+                // Greater than data, delete from right subtree
+                if (right != null)
+                    right = right.delete(data);
+                yield this;
+            }
+            default -> {
+                // Less than data, delete from left subtree
+                if (left != null)
+                    left = left.delete(data);
+                yield this;
+            }
+        };
+
+        if (self == null)
+            return null;
+
+        self.updateHeight();
+
+        return switch ((Integer) self.balance()) {
+            case Integer b when b > 1 -> {
+                if (self.left.balance() < 0)
+                    self.left = self.left.rotateLeft(); // LR
+                yield self.rotateRight(); // LL
+            }
+            case Integer b when b < -1 -> {
+                if (self.right.balance() > 0)
+                    self.right = self.right.rotateRight(); // RL
+                yield self.rotateLeft(); // RR
+            }
+            default -> self;
+        };
     }
 
     private AVLNode<T> rotateLeft() {

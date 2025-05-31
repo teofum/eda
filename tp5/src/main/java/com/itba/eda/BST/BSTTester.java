@@ -109,5 +109,12 @@ public class BSTTester {
             avl.insert(i);
             System.out.println(avl.hierarchy());
         }
+
+        Integer[] values2 = { 19, 4, 15, 7, 1, 3, 16 };
+        for (var i : values2) {
+            System.out.println("Delete " + i);
+            avl.delete(i);
+            System.out.println(avl.hierarchy());
+        }
     }
 }
