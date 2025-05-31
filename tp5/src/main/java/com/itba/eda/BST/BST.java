@@ -96,6 +96,10 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
         this.order = order;
     }
 
+    public int count(T data) {
+        return root == null ? 0 : root.count(data);
+    }
+
     public class BSTIteratorByLevel implements Iterator<T> {
         Queue<Node> pending = new LinkedList<>();
 
@@ -291,6 +295,18 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
             int rightHeight = right == null ? 0 : right.height() + 1;
 
             return Math.max(leftHeight, rightHeight);
+        }
+
+        // O(log2 n) if tree is balanced
+        // O(n) worst case (degenerate tree)
+        public int count(T data) {
+            Integer cmp = data.compareTo(this.data);
+
+            var count = switch (cmp) {
+                case Integer n when n > 0 -> right == null ? 0 : right.count(data);
+                default -> left == null ? 0 : left.count(data);
+            };
+            return count + (cmp == 0 ? 1 : 0);
         }
 
         private boolean leaf() {

@@ -116,6 +116,30 @@ public class BSTTest {
         assertEquals("8 15 20 22 25 27 35 55 74", sb.toString().trim());
     }
 
+    @Test
+    @DisplayName("Count")
+    public void testCount() {
+        var tree = makeTestTree();
+
+        assertEquals(1, tree.count(60));
+        assertEquals(1, tree.count(44));
+        assertEquals(2, tree.count(50));
+        assertEquals(2, tree.count(40));
+        assertEquals(0, tree.count(69420));
+
+        tree.delete(50);
+        assertEquals(1, tree.count(50));
+        assertEquals(2, tree.count(40));
+
+        tree.delete(40);
+        assertEquals(1, tree.count(50));
+        assertEquals(1, tree.count(40));
+
+        tree.delete(40);
+        assertEquals(1, tree.count(50));
+        assertEquals(0, tree.count(40));
+    }
+
     private BST<Integer> makeTestTree() {
         var tree = new BST<Integer>();
 
