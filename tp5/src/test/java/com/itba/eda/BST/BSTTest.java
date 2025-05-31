@@ -166,6 +166,23 @@ public class BSTTest {
         assertNull(tree.nth(9));
     }
 
+    @Test
+    @DisplayName("Closest Common Ancestor")
+    public void testClosestCommonAncestor() {
+        var tree = makeTestTree3();
+
+        // Should return null if a = b
+        assertNull(tree.closestCommonAncestor(35, 35));
+
+        // 0 is not in the tree
+        assertNull(tree.closestCommonAncestor(0, 85));
+
+        assertEquals(70, tree.closestCommonAncestor(35, 70));
+        assertEquals(70, tree.closestCommonAncestor(70, 35));
+
+        assertEquals(70, tree.closestCommonAncestor(40, 80));
+    }
+
     private BST<Integer> makeTestTree() {
         var tree = new BST<Integer>();
 
@@ -195,6 +212,22 @@ public class BSTTest {
         tree.insert(8);
         tree.insert(27);
         tree.insert(25);
+
+        return tree;
+    }
+
+    private BST<Integer> makeTestTree3() {
+        var tree = new BST<Integer>();
+
+        tree.insert(5);
+        tree.insert(70);
+        tree.insert(30);
+        tree.insert(35);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(80);
+        tree.insert(90);
+        tree.insert(85);
 
         return tree;
     }

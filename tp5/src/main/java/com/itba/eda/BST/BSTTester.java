@@ -2,6 +2,8 @@ package com.itba.eda.BST;
 
 public class BSTTester {
     public static void main(String[] args) {
+        System.out.println("\n|========= TREE 1 =========|\n");
+
         var tree = new BST<Integer>();
 
         System.out.println(tree.hierarchy());
@@ -39,6 +41,8 @@ public class BSTTester {
         tree.delete(50);
         System.out.println(tree.hierarchy());
 
+        System.out.println("\n|========= TREE 2 =========|\n");
+
         var tree2 = new BST<Integer>();
 
         tree2.insert(35);
@@ -62,5 +66,21 @@ public class BSTTester {
         for (var v : tree2)
             sb.append(v + " ");
         System.out.println(sb);
+
+        System.out.println("\n|========= TREE 3 =========|\n");
+
+        var tree3 = new BST<Integer>();
+
+        tree3.insert(5);
+        tree3.insert(70);
+        tree3.insert(30);
+        tree3.insert(35);
+        tree3.insert(20);
+        tree3.insert(40);
+        tree3.insert(80);
+        tree3.insert(90);
+        tree3.insert(85);
+
+        System.out.println(tree3.hierarchy());
     }
 }

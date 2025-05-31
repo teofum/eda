@@ -112,6 +112,14 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
         return data;
     }
 
+    public T closestCommonAncestor(T a, T b) {
+        return root == null ? null : switch ((Integer) a.compareTo(b)) {
+            case 0 -> null;
+            case Integer n when n > 0 -> root.closestCommonAncestor(b, a);
+            default -> root.closestCommonAncestor(a, b);
+        };
+    }
+
     public class BSTIteratorByLevel implements Iterator<T> {
         Queue<Node> pending = new LinkedList<>();
 
@@ -319,6 +327,26 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
                 default -> left == null ? 0 : left.count(data);
             };
             return count + (cmp == 0 ? 1 : 0);
+        }
+
+        public T closestCommonAncestor(T a, T b) {
+            // Both values are in the right subtree
+            if (a.compareTo(data) > 0)
+                return right == null ? null : right.closestCommonAncestor(a, b);
+
+            // Both values are in the left subtree
+            if (b.compareTo(data) < 0)
+                return left == null ? null : left.closestCommonAncestor(a, b);
+
+            // One of the values is equal to this node, then it is the closest common
+            // ancestor
+            if (a.compareTo(data) == 0)
+                return right == null ? null : (right.contains(b) ? data : null);
+            if (b.compareTo(data) == 0)
+                return left == null ? null : (left.contains(a) ? data : null);
+
+            // One value is in either subtree, this must be the closest common ancestor
+            return (left != null && right != null && left.contains(a) && right.contains(b)) ? data : null;
         }
 
         private boolean leaf() {
