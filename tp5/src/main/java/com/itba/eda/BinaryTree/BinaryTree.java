@@ -7,15 +7,23 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-public class BinaryTree implements BinaryTreeService {
-    private Node root;
+public class BinaryTree<T> implements BinaryTreeService {
+    private final UnaryOperator<Node<T>> left = (n) -> n.setLeft(new Node<T>());
+    private final UnaryOperator<Node<T>> right = (n) -> n.setRight(new Node<T>());
+    private final UnaryOperator<Node<T>> consume = (n) -> n;
 
-    public BinaryTree(String filename) throws FileNotFoundException {
+    private Node<T> root;
+    private Function<String, T> parser;
+
+    public BinaryTree(String filename, Function<String, T> parser) throws FileNotFoundException {
         var is = getClass().getClassLoader().getResourceAsStream(filename);
         if (is == null)
             throw new FileNotFoundException(filename);
+
+        this.parser = parser;
 
         var scanner = new Scanner(is).useDelimiter("\\s+");
         buildTree(scanner);
@@ -43,7 +51,7 @@ public class BinaryTree implements BinaryTreeService {
          * nodes, which can be null (dummy) as we traverse the tree by level.
          */
         var sb = new StringBuilder();
-        Queue<Node> pending = new LinkedList<>();
+        Queue<Node<T>> pending = new LinkedList<>();
         pending.add(root);
 
         /*
@@ -102,7 +110,7 @@ public class BinaryTree implements BinaryTreeService {
         if (root == null)
             return -1;
 
-        Queue<Entry<Node, Integer>> pending = new LinkedList<>();
+        Queue<Entry<Node<T>, Integer>> pending = new LinkedList<>();
         pending.add(Map.entry(root, 0));
 
         int level = 0;
@@ -130,10 +138,10 @@ public class BinaryTree implements BinaryTreeService {
     }
 
     private void buildTree(Scanner scanner) {
-        Queue<NodeOperation> pending = new LinkedList<>();
+        Queue<NodeOperation<T>> pending = new LinkedList<>();
 
-        root = new Node();
-        pending.add(new NodeOperation(root, NodeOperation.consume));
+        root = new Node<T>();
+        pending.add(new NodeOperation<T>(root, consume));
 
         while (scanner.hasNext()) {
             var nextPending = pending.remove();
@@ -142,15 +150,15 @@ public class BinaryTree implements BinaryTreeService {
             switch (scanner.next()) {
                 case "?" -> {
                     // Add dummy operations for (non existent) left and right nodes
-                    pending.add(new NodeOperation(null, NodeOperation.consume));
-                    pending.add(new NodeOperation(null, NodeOperation.consume));
+                    pending.add(new NodeOperation<T>(null, consume));
+                    pending.add(new NodeOperation<T>(null, consume));
                 }
                 case String token -> {
                     current = nextPending.action.apply(current);
-                    current.data = token;
+                    current.data = parser.apply(token);
 
-                    pending.add(new NodeOperation(current, NodeOperation.left));
-                    pending.add(new NodeOperation(current, NodeOperation.right));
+                    pending.add(new NodeOperation<T>(current, left));
+                    pending.add(new NodeOperation<T>(current, right));
                 }
             }
         }
@@ -159,18 +167,18 @@ public class BinaryTree implements BinaryTreeService {
             root = null;
     }
 
-    static class Node {
-        private String data;
-        private Node left, right;
+    static class Node<T> {
+        private T data;
+        private Node<T> left, right;
 
         public Node() {
         }
 
-        public Node setLeft(Node node) {
+        public Node<T> setLeft(Node<T> node) {
             return left = node;
         }
 
-        public Node setRight(Node node) {
+        public Node<T> setRight(Node<T> node) {
             return right = node;
         }
 
@@ -252,15 +260,11 @@ public class BinaryTree implements BinaryTreeService {
         }
     }
 
-    static class NodeOperation {
-        public static final UnaryOperator<Node> left = (n) -> n.setLeft(new Node());
-        public static final UnaryOperator<Node> right = (n) -> n.setRight(new Node());
-        public static final UnaryOperator<Node> consume = (n) -> n;
+    static class NodeOperation<T> {
+        private Node<T> node;
+        private UnaryOperator<Node<T>> action;
 
-        private Node node;
-        private UnaryOperator<Node> action;
-
-        public NodeOperation(Node node, UnaryOperator<Node> action) {
+        public NodeOperation(Node<T> node, UnaryOperator<Node<T>> action) {
             this.node = node;
             this.action = action;
         }
