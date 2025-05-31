@@ -98,5 +98,16 @@ public class BSTTester {
         tree4.insert(85);
 
         System.out.println(tree4.hierarchy());
+
+        System.out.println("\n|========= AVL 1 =========|\n");
+
+        var avl = new AVL<Integer>();
+
+        Integer[] values = { 1, 2, 4, 7, 15, 3, 10, 17, 19, 16 };
+        for (var i : values) {
+            System.out.println("Insert " + i);
+            avl.insert(i);
+            System.out.println(avl.hierarchy());
+        }
     }
 }

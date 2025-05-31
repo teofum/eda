@@ -22,15 +22,15 @@ public class BSTNode<T extends Comparable<? super T>> implements Node<T> {
 
     public BSTNode<T> insert(T data) {
         if (data.compareTo(this.data) > 0) {
-            if (right == null)
-                right = new BSTNode<T>(data);
-            else
-                right.insert(data);
+            right = switch (right) {
+                case null -> new BSTNode<T>(data);
+                case BSTNode<T> right -> right.insert(data);
+            };
         } else {
-            if (left == null)
-                left = new BSTNode<T>(data);
-            else
-                left.insert(data);
+            left = switch (left) {
+                case null -> new BSTNode<T>(data);
+                case BSTNode<T> left -> left.insert(data);
+            };
         }
 
         return this;

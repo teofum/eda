@@ -9,10 +9,10 @@ public class AVL<T extends Comparable<? super T>> implements BinaryTree<T, AVLNo
     }
 
     public void insert(T data) {
-        if (root == null)
-            root = new AVLNode<T>(data);
-        else
-            root.insert(data);
+        root = switch (root) {
+            case null -> new AVLNode<T>(data);
+            case AVLNode<T> root -> root.insert(data);
+        };
     }
 
     public void delete(T data) {

@@ -11,6 +11,10 @@ public interface Node<T extends Comparable<? super T>> {
 
     Node<T> delete(T data);
 
+    default String valueString() {
+        return data().toString();
+    }
+
     default boolean leaf() {
         return left() == null && right() == null;
     }
@@ -112,7 +116,7 @@ public interface Node<T extends Comparable<? super T>> {
             sb.append("\n" + prefix);
         }
 
-        sb.append("[" + data() + "]");
+        sb.append("[" + valueString() + "]");
         if (!leaf()) {
             prefix = prefix.replace("├", "│").replace("─", " ").replace("╰", " ");
             sb.append(left() == null ? "\n" + prefix + "├──(null)" : left().hierarchy(prefix + "├──"));
