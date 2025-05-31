@@ -82,5 +82,21 @@ public class BSTTester {
         tree3.insert(85);
 
         System.out.println(tree3.hierarchy());
+
+        System.out.println("\n|========= TREE 4 =========|\n");
+
+        var tree4 = new BST<Integer>();
+
+        tree4.insert(5);
+        tree4.insert(70);
+        tree4.insert(30);
+        tree4.insert(70);
+        tree4.insert(20);
+        tree4.insert(40);
+        tree4.insert(80);
+        tree4.insert(90);
+        tree4.insert(85);
+
+        System.out.println(tree4.hierarchy());
     }
 }

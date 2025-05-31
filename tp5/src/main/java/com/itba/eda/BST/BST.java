@@ -120,6 +120,13 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
         };
     }
 
+    public T closestCommonAncestorRepeat(T a, T b) {
+        return root == null ? null : switch ((Integer) a.compareTo(b)) {
+            case Integer n when n > 0 -> root.closestCommonAncestorRepeat(b, a);
+            default -> root.closestCommonAncestorRepeat(a, b);
+        };
+    }
+
     public class BSTIteratorByLevel implements Iterator<T> {
         Queue<Node> pending = new LinkedList<>();
 
@@ -344,6 +351,26 @@ public class BST<T extends Comparable<? super T>> implements Iterable<T> {
                 return right == null ? null : (right.contains(b) ? data : null);
             if (b.compareTo(data) == 0)
                 return left == null ? null : (left.contains(a) ? data : null);
+
+            // One value is in either subtree, this must be the closest common ancestor
+            return (left != null && right != null && left.contains(a) && right.contains(b)) ? data : null;
+        }
+
+        public T closestCommonAncestorRepeat(T a, T b) {
+            // Both values are in the right subtree
+            if (a.compareTo(data) > 0)
+                return right == null ? null : right.closestCommonAncestorRepeat(a, b);
+
+            // Both values are in the left subtree
+            if (b.compareTo(data) < 0)
+                return left == null ? null : left.closestCommonAncestorRepeat(a, b);
+
+            // One of the values is equal to this node, then it is the closest common
+            // ancestor
+            if (b.compareTo(data) == 0)
+                return left == null ? null : (left.contains(a) ? data : null); // if a == b it's in the left subtree
+            if (a.compareTo(data) == 0)
+                return right == null ? null : (right.contains(b) ? data : null);
 
             // One value is in either subtree, this must be the closest common ancestor
             return (left != null && right != null && left.contains(a) && right.contains(b)) ? data : null;
