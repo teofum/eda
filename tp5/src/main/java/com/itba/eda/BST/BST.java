@@ -1,5 +1,8 @@
 package com.itba.eda.BST;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class BST<T extends Comparable<? super T>> {
     private Node root;
 
@@ -36,6 +39,30 @@ public class BST<T extends Comparable<? super T>> {
 
     public String hierarchy() {
         return root != null ? root.hierarchy("") : null;
+    }
+
+    public String byLevel() {
+        if (root == null)
+            return null;
+
+        // shrimple bfs
+        var sb = new StringBuilder();
+        Queue<Node> pending = new LinkedList<>();
+        pending.add(root);
+
+        while (!pending.isEmpty()) {
+            var node = pending.remove();
+            if (node != null) {
+                sb.append(node.data + " ");
+
+                if (node.left != null)
+                    pending.add(node.left);
+                if (node.right != null)
+                    pending.add(node.right);
+            }
+        }
+
+        return sb.toString();
     }
 
     public Node root() {

@@ -48,6 +48,14 @@ public class BSTTest {
         assertNull(empty.max());
     }
 
+    @Test
+    @DisplayName("DisplayByLevel")
+    public void testDisplayByLevel() {
+        var tree = makeTestTree2();
+
+        assertEquals("35 20 74 15 22 55 8 27 25", tree.byLevel().trim());
+    }
+
     private BST<Integer> makeTestTree() {
         var tree = new BST<Integer>();
 
@@ -61,6 +69,22 @@ public class BSTTest {
         tree.insert(44);
         tree.insert(10);
         tree.insert(40);
+
+        return tree;
+    }
+
+    private BST<Integer> makeTestTree2() {
+        var tree = new BST<Integer>();
+
+        tree.insert(35);
+        tree.insert(74);
+        tree.insert(20);
+        tree.insert(22);
+        tree.insert(55);
+        tree.insert(15);
+        tree.insert(8);
+        tree.insert(27);
+        tree.insert(25);
 
         return tree;
     }
