@@ -1,0 +1,72 @@
+package com.itba.eda.BST;
+
+public class AVLNode<T extends Comparable<? super T>> implements Node<T> {
+    T data;
+    AVLNode<T> left, right;
+
+    public AVLNode(T data) {
+        this.data = data;
+    }
+
+    public AVLNode<T> left() {
+        return left;
+    }
+
+    public AVLNode<T> right() {
+        return right;
+    }
+
+    public T data() {
+        return data;
+    }
+
+    public AVLNode<T> insert(T data) {
+        if (data.compareTo(this.data) > 0) {
+            if (right == null)
+                right = new AVLNode<T>(data);
+            else
+                right.insert(data);
+        } else {
+            if (left == null)
+                left = new AVLNode<T>(data);
+            else
+                left.insert(data);
+        }
+
+        return this;
+    }
+
+    public AVLNode<T> delete(T data) {
+        return switch ((Integer) data.compareTo(this.data)) {
+            case 0 -> {
+                // R1
+                if (left == null && right == null)
+                    yield null;
+
+                // R2
+                if (left == null)
+                    yield right;
+                if (right == null)
+                    yield left;
+
+                // R3
+                T maxLeft = left.max();
+                this.data = maxLeft;
+                left = left.delete(maxLeft);
+                yield this;
+            }
+            case Integer cmp when cmp > 0 -> {
+                // Greater than data, delete from right subtree
+                if (right != null)
+                    right = right.delete(data);
+                yield this;
+            }
+            default -> {
+                // Less than data, delete from left subtree
+                if (left != null)
+                    left = left.delete(data);
+                yield this;
+            }
+        };
+    }
+}
