@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.function.UnaryOperator;
 
 public class BinaryTree implements BinaryTreeService {
     private Node root;
@@ -34,7 +35,7 @@ public class BinaryTree implements BinaryTreeService {
         Queue<NodeOperation> pending = new LinkedList<>();
 
         root = new Node();
-        pending.add(new NodeOperation(root, NodeOperation.Action.CONSUME));
+        pending.add(new NodeOperation(root, NodeOperation.consume));
 
         while (scanner.hasNext()) {
             var nextPending = pending.remove();
@@ -43,20 +44,15 @@ public class BinaryTree implements BinaryTreeService {
             switch (scanner.next()) {
                 case "?" -> {
                     // Add dummy operations for (non existent) left and right nodes
-                    pending.add(new NodeOperation(null, NodeOperation.Action.CONSUME));
-                    pending.add(new NodeOperation(null, NodeOperation.Action.CONSUME));
+                    pending.add(new NodeOperation(null, NodeOperation.consume));
+                    pending.add(new NodeOperation(null, NodeOperation.consume));
                 }
                 case String token -> {
-                    current = switch (nextPending.action) {
-                        case NodeOperation.Action.LEFT -> current.setLeft(new Node());
-                        case NodeOperation.Action.RIGHT -> current.setRight(new Node());
-                        case NodeOperation.Action.CONSUME -> current;
-                    };
-
+                    current = nextPending.action.apply(current);
                     current.data = token;
 
-                    pending.add(new NodeOperation(current, NodeOperation.Action.LEFT));
-                    pending.add(new NodeOperation(current, NodeOperation.Action.RIGHT));
+                    pending.add(new NodeOperation(current, NodeOperation.left));
+                    pending.add(new NodeOperation(current, NodeOperation.right));
                 }
             }
         }
@@ -112,7 +108,6 @@ public class BinaryTree implements BinaryTreeService {
             if (prefix.length() > 0) {
                 sb.append("\n" + prefix);
             }
-            // .append(isRight ? "╰──" : "├──""│ ".repeat(level - 1));
 
             sb.append("[" + data + "]");
             if (!leaf()) {
@@ -126,14 +121,14 @@ public class BinaryTree implements BinaryTreeService {
     }
 
     static class NodeOperation {
-        static enum Action {
-            LEFT, RIGHT, CONSUME
-        };
+        public static final UnaryOperator<Node> left = (n) -> n.setLeft(new Node());
+        public static final UnaryOperator<Node> right = (n) -> n.setRight(new Node());
+        public static final UnaryOperator<Node> consume = (n) -> n;
 
         private Node node;
-        private Action action;
+        private UnaryOperator<Node> action;
 
-        public NodeOperation(Node node, Action action) {
+        public NodeOperation(Node node, UnaryOperator<Node> action) {
             this.node = node;
             this.action = action;
         }
