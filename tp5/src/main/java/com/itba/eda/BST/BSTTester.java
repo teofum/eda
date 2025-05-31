@@ -101,7 +101,7 @@ public class BSTTester {
 
         System.out.println("\n|========= AVL 1 =========|\n");
 
-        var avl = new AVL<Integer>();
+        var avl = new AVLTree<Integer>();
 
         Integer[] values = { 1, 2, 4, 7, 15, 3, 10, 17, 19, 16 };
         for (var i : values) {

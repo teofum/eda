@@ -27,7 +27,7 @@ public class AVLTest {
         assertEquals(false, tree.contains(420));
         assertEquals(false, tree.contains(1));
 
-        var empty = new AVL<Integer>();
+        var empty = new AVLTree<Integer>();
 
         assertEquals(false, empty.contains(50));
     }
@@ -43,7 +43,7 @@ public class AVLTest {
         tree.insert(99);
         assertEquals(99, tree.max());
 
-        var empty = new AVL<Integer>();
+        var empty = new AVLTree<Integer>();
 
         assertNull(empty.min());
         assertNull(empty.max());
@@ -85,7 +85,7 @@ public class AVLTest {
         assertEquals(70, tree.max());
         assertEquals(10, tree.min());
 
-        var empty = new AVL<Integer>();
+        var empty = new AVLTree<Integer>();
         assertDoesNotThrow(() -> empty.delete(50));
     }
 
@@ -123,17 +123,17 @@ public class AVLTest {
         assertEquals(1, tree.count(40));
         assertEquals(0, tree.count(69420));
 
-        // tree.delete(50);
-        // assertEquals(1, tree.count(50));
-        // assertEquals(2, tree.count(40));
-        //
-        // tree.delete(40);
-        // assertEquals(1, tree.count(50));
-        // assertEquals(1, tree.count(40));
-        //
-        // tree.delete(40);
-        // assertEquals(1, tree.count(50));
-        // assertEquals(0, tree.count(40));
+        tree.delete(50);
+        assertEquals(0, tree.count(50));
+        assertEquals(1, tree.count(40));
+
+        tree.delete(40);
+        assertEquals(0, tree.count(50));
+        assertEquals(0, tree.count(40));
+
+        tree.delete(40);
+        assertEquals(0, tree.count(50));
+        assertEquals(0, tree.count(40));
     }
 
     @Test
@@ -162,8 +162,8 @@ public class AVLTest {
         // assertNull(tree.nth(9));
     }
 
-    private AVL<Integer> makeTestTree() {
-        var tree = new AVL<Integer>();
+    private AVLTree<Integer> makeTestTree() {
+        var tree = new AVLTree<Integer>();
 
         tree.insert(50);
         tree.insert(60);
@@ -179,8 +179,8 @@ public class AVLTest {
         return tree;
     }
 
-    private AVL<Integer> makeTestTree2() {
-        var tree = new AVL<Integer>();
+    private AVLTree<Integer> makeTestTree2() {
+        var tree = new AVLTree<Integer>();
 
         tree.insert(35);
         tree.insert(74);
@@ -195,8 +195,8 @@ public class AVLTest {
         return tree;
     }
 
-    private AVL<Integer> makeTestTree3() {
-        var tree = new AVL<Integer>();
+    private AVLTree<Integer> makeTestTree3() {
+        var tree = new AVLTree<Integer>();
 
         tree.insert(5);
         tree.insert(70);
@@ -211,8 +211,8 @@ public class AVLTest {
         return tree;
     }
 
-    private AVL<Integer> makeTestTree4() {
-        var tree = new AVL<Integer>();
+    private AVLTree<Integer> makeTestTree4() {
+        var tree = new AVLTree<Integer>();
 
         tree.insert(5);
         tree.insert(70);

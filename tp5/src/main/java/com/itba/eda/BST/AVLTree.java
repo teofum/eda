@@ -1,6 +1,6 @@
 package com.itba.eda.BST;
 
-public class AVL<T extends Comparable<? super T>> implements BinaryTree<T, AVLNode<T>> {
+public class AVLTree<T extends Comparable<? super T>> implements BinaryTree<T, AVLNode<T>> {
     private AVLNode<T> root;
     private Order order = Order.ByLevel;
 
