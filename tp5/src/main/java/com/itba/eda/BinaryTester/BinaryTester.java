@@ -16,6 +16,7 @@ public class BinaryTester {
         try {
             var tree = new BinaryTree(filename);
 
+            System.out.println(tree.hierarchy());
             System.out.println("preOrder: " + tree.preOrder());
             System.out.println("postOrder: " + tree.postOrder());
         } catch (FileNotFoundException e) {

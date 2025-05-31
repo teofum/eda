@@ -26,6 +26,10 @@ public class BinaryTree implements BinaryTreeService {
         return root != null ? root.postOrder() : null;
     }
 
+    public String hierarchy() {
+        return root != null ? root.hierarchy("") : null;
+    }
+
     private void buildTree(Scanner scanner) {
         Queue<NodeOperation> pending = new LinkedList<>();
 
@@ -99,6 +103,24 @@ public class BinaryTree implements BinaryTreeService {
                 sb.append(right.postOrder());
             sb.append(" ").append(data);
 
+            return sb.toString();
+        }
+
+        public String hierarchy(String prefix) {
+            var sb = new StringBuilder();
+
+            if (prefix.length() > 0) {
+                sb.append("\n" + prefix);
+            }
+            // .append(isRight ? "╰──" : "├──""│ ".repeat(level - 1));
+
+            sb.append("[" + data + "]");
+            if (!leaf()) {
+                prefix = prefix.replace("├", "│").replace("─", " ").replace("╰", " ");
+                sb.append(left == null ? "\n" + prefix + "├──(null)" : left.hierarchy(prefix + "├──"));
+                sb.append(right == null ? "\n" + prefix + "╰──(null)"
+                        : right.hierarchy(prefix + "╰──"));
+            }
             return sb.toString();
         }
     }
