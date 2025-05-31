@@ -11,10 +11,15 @@ public class BST<T extends Comparable<? super T>> {
     }
 
     public boolean contains(T data) {
-        if (root == null)
-            return false;
+        return root == null ? false : root.contains(data);
+    }
 
-        return root.contains(data);
+    public T max() {
+        return root == null ? null : root.max();
+    }
+
+    public T min() {
+        return root == null ? null : root.min();
     }
 
     public String preOrder() {
@@ -82,6 +87,14 @@ public class BST<T extends Comparable<? super T>> {
                 case Integer cmp when cmp > 0 -> right == null ? false : right.contains(data);
                 default -> left == null ? false : left.contains(data);
             };
+        }
+
+        public T max() {
+            return right == null ? data : right.max();
+        }
+
+        public T min() {
+            return left == null ? data : left.min();
         }
 
         public String preOrder() {
