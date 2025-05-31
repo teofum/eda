@@ -10,6 +10,13 @@ public class BST<T extends Comparable<? super T>> {
             root.insert(data);
     }
 
+    public boolean contains(T data) {
+        if (root == null)
+            return false;
+
+        return root.contains(data);
+    }
+
     public String preOrder() {
         return root != null ? root.preOrder() : null;
     }
@@ -34,12 +41,24 @@ public class BST<T extends Comparable<? super T>> {
         return root == null ? -1 : root.height();
     }
 
-    private class Node {
+    public class Node {
         T data;
         Node left, right;
 
         public Node(T data) {
             this.data = data;
+        }
+
+        public Node left() {
+            return left;
+        }
+
+        public Node right() {
+            return right;
+        }
+
+        public T data() {
+            return data;
         }
 
         public void insert(T data) {
@@ -54,6 +73,15 @@ public class BST<T extends Comparable<? super T>> {
                 else
                     left.insert(data);
             }
+        }
+
+        public boolean contains(T data) {
+            // eat shit, java
+            return switch ((Integer) data.compareTo(this.data)) {
+                case 0 -> true;
+                case Integer cmp when cmp > 0 -> right == null ? false : right.contains(data);
+                default -> left == null ? false : left.contains(data);
+            };
         }
 
         public String preOrder() {
