@@ -1,6 +1,7 @@
 package com.itba.eda.BinaryTree;
 
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -81,6 +82,22 @@ public class BinaryTree implements BinaryTreeService {
         }
 
         return sb.toString();
+    }
+
+    public void toFile(String filename) {
+        try (var pw = new PrintWriter(filename)) {
+            pw.print(byLevel());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof BinaryTree bt))
+            return false;
+
+        return root.equals(bt.root);
     }
 
     private void buildTree(Scanner scanner) {
@@ -169,6 +186,33 @@ public class BinaryTree implements BinaryTreeService {
                         : right.hierarchy(prefix + "╰──"));
             }
             return sb.toString();
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof Node n))
+                return false;
+
+            if (!data.equals(n.data))
+                return false;
+
+            if (left != null) {
+                if (!left.equals(n.left))
+                    return false;
+            } else {
+                if (n.left != null)
+                    return false;
+            }
+
+            if (right != null) {
+                if (!right.equals(n.right))
+                    return false;
+            } else {
+                if (n.right != null)
+                    return false;
+            }
+
+            return true;
         }
     }
 

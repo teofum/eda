@@ -20,6 +20,24 @@ public class BinaryTester {
             System.out.println("preOrder: " + tree.preOrder());
             System.out.println("postOrder: " + tree.postOrder());
             System.out.println("byLevel:\n" + tree.byLevel());
+
+            if (tree.equals(tree)) {
+                System.out.println("the tree is equal to itself");
+            } else {
+                System.out.println("you really fucked up");
+            }
+
+            tree.toFile(filename + "_copy");
+            var copy = new BinaryTree(filename + "_copy");
+            System.out.println("preOrder: " + copy.preOrder());
+            System.out.println("postOrder: " + copy.postOrder());
+            System.out.println("byLevel:\n" + copy.byLevel());
+
+            if (tree.equals(copy)) {
+                System.out.println("the trees are equal");
+            } else {
+                System.out.println("you fucked up");
+            }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
